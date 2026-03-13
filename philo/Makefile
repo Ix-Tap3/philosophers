@@ -4,7 +4,7 @@ NAME = philo
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g
 SRCS_DIR = srcs
-SRCS = main.c
+SRCS = main.c $(SRCS_DIR)/parser.c $(SRCS_DIR)/utils.c $(SRCS_DIR)/thread_handler.c
 OBJS_DIR = objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 

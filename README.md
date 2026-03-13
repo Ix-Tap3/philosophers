@@ -1,3 +1,3 @@
 # Philosopher
 
-***Makefile in work***
+***This Makefile is a work in progress***

@@ -6,12 +6,33 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:07:51 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 13:58:18 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:33:36 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include "../includes/utils.h"
 #include <unistd.h>
+#include <stdio.h>
+
+void	print_msg(t_philo *philo, char *msg)
+{
+	t_data		*data;
+	long long	time;
+
+	data = philo->data;
+	pthread_mutex_lock(&philo->data->die_lock);
+	if (philo->data->one_is_dead == 1)
+	{
+		pthread_mutex_unlock(&philo->data->die_lock);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->die_lock);
+	time = get_actual_time() - data->start_time;
+	pthread_mutex_lock(&data->text_lock);
+	printf("%lld %d %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&data->text_lock);
+}
 
 static void	*monitor_process(void *arg)
 {
@@ -29,13 +50,12 @@ static void	*monitor_process(void *arg)
 		pthread_mutex_lock(&data->die_lock);
 		while (i < data->nb_philosophers)
 		{
-			if (is_dead(&philo_arr[i]) == 1)
+			if (is_dead(&philo_arr[i++]) == 1)
 			{
 				data->one_is_dead = 1;
 				stop = 1;
 				break;
 			}
-			i++;
 		}
 		pthread_mutex_unlock(&data->die_lock);
 		usleep(1000);

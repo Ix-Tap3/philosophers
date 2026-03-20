@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 12:02:00 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 14:21:32 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:41:44 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,22 @@ int	is_dead(t_philo *philo)
 	past_time = actual_time - philo->last_meal;
 	if (past_time >= philo->data->time_to_die)
 	{
-		print_msg(philo, "died");
+		if (pthread_mutex_lock(&philo->data->text_lock) != 0)
+			return (-1);
+		printf("%lld %d died\n", actual_time, philo->id);
+		if (pthread_mutex_unlock(&philo->data->text_lock) != 0)
+			return (-1);
 		return (1);
-		// if (pthread_mutex_lock(&philo->data->text_lock) != 0)
-		// 	return (-1);
-		// printf("%lld %d died\n", actual_time, philo->id);
-		// if (pthread_mutex_unlock(&philo->data->text_lock) != 0)
-		// 	return (-1);
-		// return (1);
 	}
 	return (0);
 }
 
-void	print_msg(t_philo *philo, char *msg)
-{
-	t_data		*data;
-	long long	time;
-
-	data = philo->data;
-	pthread_mutex_lock(&philo->data->die_lock);
-	if (philo->data->one_is_dead == 1)
-	{
-		pthread_mutex_unlock(&philo->data->die_lock);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->data->die_lock);
-	time = get_actual_time() - data->start_time;
-	pthread_mutex_lock(&data->text_lock);
-	printf("%lld %d %s\n", time, philo->id, msg);
-	pthread_mutex_unlock(&data->text_lock);
-}
-
-int	get_left_fork(int id)
+static int	get_left_fork(int id)
 {
 	return (id - 1);
 }
 
-int	get_right_fork(t_philo *philo)
+static int	get_right_fork(t_philo *philo)
 {
 	return (philo->id % philo->data->nb_philosophers);
 }

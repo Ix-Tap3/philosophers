@@ -6,13 +6,12 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:54 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:41:55 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:43:08 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 #include "../includes/utils.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 

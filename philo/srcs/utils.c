@@ -6,12 +6,11 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:49:47 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:42:21 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:44:40 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <stdio.h>
 #include <sys/time.h>
 
 static int	ft_isspace(char c)

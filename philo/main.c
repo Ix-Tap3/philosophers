@@ -6,16 +6,13 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 18:25:14 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:44:38 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:47:18 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
 #include "includes/utils.h"
-#include <pthread.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 void	clean_all(t_data *data, t_philo *philo_arr)
 {

@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:07:51 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 14:33:36 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 15:01:03 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,24 @@ void	print_msg(t_philo *philo, char *msg)
 	pthread_mutex_unlock(&data->text_lock);
 }
 
+static int	check_philo_meals(t_philo *philo_arr)
+{
+	t_data	*data;
+	int		i;
+	int		all_eat;
+
+	data = philo_arr[0].data;
+	i = 0;
+	all_eat = 1;
+	while (i < data->nb_philosophers)
+	{
+		if (philo_arr[i].nb_meals != data->max_meals)
+			all_eat = 0;
+		i++;
+	}
+	return (all_eat);
+}
+
 static void	*monitor_process(void *arg)
 {
 	t_philo	*philo_arr;
@@ -50,7 +68,7 @@ static void	*monitor_process(void *arg)
 		pthread_mutex_lock(&data->die_lock);
 		while (i < data->nb_philosophers)
 		{
-			if (is_dead(&philo_arr[i++]) == 1)
+			if (check_philo_meals(philo_arr) || is_dead(&philo_arr[i++]) == 1)
 			{
 				data->one_is_dead = 1;
 				stop = 1;

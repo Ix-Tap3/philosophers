@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 12:02:00 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 14:41:44 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 15:01:41 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	philo_eat(t_philo *philo)
 	print_msg(philo, "is eating");
 	pthread_mutex_lock(&data->die_lock);
 	philo->last_meal = get_actual_time() - data->start_time;
+	philo->nb_meals++;
 	pthread_mutex_unlock(&data->die_lock);
 	usleep(data->time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->data->forks[get_left_fork(philo->id)]);

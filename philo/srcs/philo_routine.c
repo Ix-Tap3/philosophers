@@ -6,13 +6,12 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 12:02:00 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:24:10 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:21:32 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 #include "../includes/utils.h"
-#include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -21,18 +20,18 @@ int	is_dead(t_philo *philo)
 	long long	actual_time;
 	long long	past_time;
 
-	// if (philo->data->one_is_dead == 1)
-	// 	return (1);
 	actual_time = get_actual_time() - philo->data->start_time;
 	past_time = actual_time - philo->last_meal;
 	if (past_time >= philo->data->time_to_die)
 	{
-		if (pthread_mutex_lock(&philo->data->text_lock) != 0)
-			return (-1);
-		printf("%lld %d died\n", actual_time, philo->id);
-		if (pthread_mutex_unlock(&philo->data->text_lock) != 0)
-			return (-1);
+		print_msg(philo, "died");
 		return (1);
+		// if (pthread_mutex_lock(&philo->data->text_lock) != 0)
+		// 	return (-1);
+		// printf("%lld %d died\n", actual_time, philo->id);
+		// if (pthread_mutex_unlock(&philo->data->text_lock) != 0)
+		// 	return (-1);
+		// return (1);
 	}
 	return (0);
 }
@@ -91,9 +90,8 @@ static void	philo_eat(t_philo *philo)
 	pthread_mutex_unlock(&data->die_lock);
 	usleep(data->time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->data->forks[get_left_fork(philo->id)]);
-	print_msg(philo, "release a fork");
 	pthread_mutex_unlock(&philo->data->forks[get_right_fork(philo)]);
-	print_msg(philo, "release a fork");
+	usleep(1000);
 }
 
 void	*philo_routine(void *arg)

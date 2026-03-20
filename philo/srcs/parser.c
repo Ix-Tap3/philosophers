@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
+/*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:30:40 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/13 19:34:14 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/19 19:40:20 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static pthread_mutex_t	*init_forks_arr(int	nb_forks)
 	i = 0;
 	while (i < nb_forks)
 	{
-		pthread_mutex_init(&arr[0], NULL);
+		pthread_mutex_init(&arr[i], NULL);
 		i++;
 	}
 	return (arr);
@@ -58,6 +58,31 @@ static int	check_data(int ac, t_data *data)
 		ft_putstr_fd(2, "Error: invalid argument(s).\n");
 	}
 	return (ret);
+}
+
+t_philo	*init_philo_arr(t_data *data)
+{
+	t_philo	*philo_arr;
+	int		i;
+
+	if (!data)
+		return (NULL);
+	philo_arr = malloc(sizeof(t_philo) * data->nb_philosophers);
+	if (!philo_arr)
+	{
+		ft_putstr_fd(2, "Error: malloc failed !\n");
+		return (NULL);
+	}
+	i = 0;
+	while (i < data->nb_philosophers)
+	{
+		philo_arr[i].id = i + 1;
+		philo_arr[i].last_meal = 0;
+		philo_arr[i].nb_meals = 0;
+		philo_arr[i].data = data;
+		i++;
+	}
+	return (philo_arr);
 }
 
 t_data	*parse(int ac, char **av)

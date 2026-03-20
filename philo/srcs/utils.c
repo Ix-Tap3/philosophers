@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:49:47 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/13 17:54:21 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/19 19:42:21 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	ft_putstr_fd(int fd, char *s)
 	write(fd, s, len);
 }
 
-long long	get_actual_time()
+long long	get_actual_time(void)
 {
 	struct timeval	tv;
 	long long		time;

@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:27:09 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/13 19:33:03 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/19 19:38:36 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
+	int				one_is_dead;
 	long long		start_time;
+	pthread_t		monitor_tid;
 	pthread_t		*tids;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	text_lock;
@@ -36,10 +38,20 @@ typedef struct s_philo
 	t_data			*data;
 }					t_philo;
 
+/* Parser */
 t_data	*parse(int ac, char **av);
+t_philo	*init_philo_arr(t_data *data);
+
+/* Monitor */
+int		start_monitor(t_philo *philo_arr);
+void	print_msg(t_philo *philo, char *msg);
 
 /* Threads Handler */
-int	create_threads(t_data *data);
-int	wait_all_threads(t_data *data);
+int		create_threads(t_data *data, t_philo *philo_arr);
+int		wait_all_threads(t_data *data);
+
+/* Philo routine */
+void	*philo_routine(void *arg);
+int		is_dead(t_philo *philo);
 
 #endif

@@ -6,31 +6,37 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 18:25:14 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 14:47:18 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/20 15:27:16 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
 #include "includes/utils.h"
+#include <pthread.h>
 #include <stdlib.h>
 
-void	clean_all(t_data *data, t_philo *philo_arr)
+static void	destroy_mutexs(t_data *data)
 {
 	int	i;
 
-	if (philo_arr)
-		free(philo_arr);
-	i = 0;
 	if (pthread_mutex_destroy(&data->text_lock) != 0)
 		ft_putstr_fd(2, "Error: Impossible to destroy text mutex.\n");
 	if (pthread_mutex_destroy(&data->die_lock) != 0)
 		ft_putstr_fd(2, "Error: Impossible to destroy dead mutex.\n");
+	i = 0;
 	while (data->forks && i < data->nb_philosophers)
 	{
 		if (pthread_mutex_destroy(&data->forks[i]) != 0)
 			ft_putstr_fd(2, "Error: Impossible to destroy fork mutex.\n");
 		i++;
 	}
+}
+
+static void	clean_all(t_data *data, t_philo *philo_arr)
+{
+	destroy_mutexs(data);
+	if (philo_arr)
+		free(philo_arr);
 	if (data->forks)
 		free(data->forks);
 	if (data->tids)

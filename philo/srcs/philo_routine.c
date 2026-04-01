@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 12:02:00 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 15:01:41 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/28 16:40:07 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,6 @@ static int	get_right_fork(t_philo *philo)
 
 static void	philo_eat(t_philo *philo)
 {
-	t_data	*data;
-
-	data = philo->data;
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->data->forks[get_left_fork(philo->id)]);
@@ -64,11 +61,11 @@ static void	philo_eat(t_philo *philo)
 		print_msg(philo, "has taken a fork");
 	}
 	print_msg(philo, "is eating");
-	pthread_mutex_lock(&data->die_lock);
-	philo->last_meal = get_actual_time() - data->start_time;
+	pthread_mutex_lock(&philo->data->die_lock);
+	philo->last_meal = get_actual_time() - philo->data->start_time;
 	philo->nb_meals++;
-	pthread_mutex_unlock(&data->die_lock);
-	usleep(data->time_to_eat * 1000);
+	pthread_mutex_unlock(&philo->data->die_lock);
+	usleep(philo->data->time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->data->forks[get_left_fork(philo->id)]);
 	pthread_mutex_unlock(&philo->data->forks[get_right_fork(philo)]);
 	usleep(1000);

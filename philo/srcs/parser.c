@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:30:40 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:40:20 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/30 16:13:55 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/utils.h"
 #include <stdlib.h>
 
-static pthread_mutex_t	*init_forks_arr(int	nb_forks)
+static pthread_mutex_t	*init_forks_arr(int nb_forks)
 {
 	pthread_mutex_t	*arr;
 	int				i;
@@ -53,10 +53,7 @@ static int	check_data(int ac, t_data *data)
 			ret = 0;
 	}
 	if (ret == 0)
-	{
-		free(data);
 		ft_putstr_fd(2, "Error: invalid argument(s).\n");
-	}
 	return (ret);
 }
 
@@ -85,6 +82,18 @@ t_philo	*init_philo_arr(t_data *data)
 	return (philo_arr);
 }
 
+static void	parse_args(t_data *data, int ac, char **av)
+{
+	data->nb_philosophers = safe_atoi(av[1]);
+	data->time_to_die = safe_atoi(av[2]);
+	data->time_to_eat = safe_atoi(av[3]);
+	data->time_to_sleep = safe_atoi(av[4]);
+	if (ac == 6)
+		data->max_meals = safe_atoi(av[5]);
+	else
+		data->max_meals = -1;
+}
+
 t_data	*parse(int ac, char **av)
 {
 	t_data	*data;
@@ -95,16 +104,12 @@ t_data	*parse(int ac, char **av)
 		ft_putstr_fd(2, "Error: malloc failed !\n");
 		return (NULL);
 	}
-	data->nb_philosophers = safe_atoi(av[1]);
-	data->time_to_die = safe_atoi(av[2]);
-	data->time_to_eat = safe_atoi(av[3]);
-	data->time_to_sleep = safe_atoi(av[4]);
-	if (ac == 6)
-		data->max_meals = safe_atoi(av[5]);
-	else
-		data->max_meals = -1;
+	parse_args(data, ac, av);
 	if (!check_data(ac, data))
+	{
+		free(data);
 		return (NULL);
+	}
 	data->forks = init_forks_arr(data->nb_philosophers);
 	if (!data->forks)
 	{

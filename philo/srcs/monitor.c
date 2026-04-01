@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:07:51 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 15:01:03 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/28 16:34:59 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	*monitor_process(void *arg)
 			{
 				data->one_is_dead = 1;
 				stop = 1;
-				break;
+				break ;
 			}
 		}
 		pthread_mutex_unlock(&data->die_lock);
@@ -81,12 +81,15 @@ static void	*monitor_process(void *arg)
 	return (NULL);
 }
 
-int	start_monitor(t_philo *philo_arr)
+int	start_monitor(t_philo *p_arr)
 {
-	philo_arr[0].data->monitor_tid = 0;
-	if (pthread_create(&philo_arr[0].data->monitor_tid, NULL, monitor_process, philo_arr) != 0)
+	t_data	*data;
+
+	data = p_arr[0].data;
+	data->monitor_tid = 0;
+	if (pthread_create(&data->monitor_tid, NULL, monitor_process, p_arr) != 0)
 		return (0);
-	if (pthread_join(philo_arr[0].data->monitor_tid, NULL) != 0)
+	if (pthread_join(data->monitor_tid, NULL) != 0)
 		return (0);
 	return (1);
 }

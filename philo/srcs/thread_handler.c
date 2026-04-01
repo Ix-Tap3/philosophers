@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:54 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 14:43:08 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/30 16:11:23 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	create_threads(t_data *data, t_philo *philo_arr)
+int	create_threads(t_data *data, t_philo *p_arr)
 {
 	int		i;
 
@@ -29,7 +29,7 @@ int	create_threads(t_data *data, t_philo *philo_arr)
 	i = 0;
 	while (i < data->nb_philosophers)
 	{
-		if (pthread_create(&data->tids[i], NULL, philo_routine, &philo_arr[i]) != 0)
+		if (pthread_create(&data->tids[i], NULL, philo_routine, &p_arr[i]) != 0)
 			return (0);
 		i += 2;
 	}
@@ -37,7 +37,7 @@ int	create_threads(t_data *data, t_philo *philo_arr)
 	i = 1;
 	while (i < data->nb_philosophers)
 	{
-		if (pthread_create(&data->tids[i], NULL, philo_routine, &philo_arr[i]) != 0)
+		if (pthread_create(&data->tids[i], NULL, philo_routine, &p_arr[i]) != 0)
 			return (0);
 		i += 2;
 	}

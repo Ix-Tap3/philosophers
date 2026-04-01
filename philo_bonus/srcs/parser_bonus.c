@@ -1,38 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pcaplat <pcaplat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:30:40 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:40:20 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/31 13:05:48 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
-#include "../includes/utils.h"
+#include "../includes/philo_bonus.h"
+#include "../includes/utils_bonus.h"
+#include <fcntl.h>
 #include <stdlib.h>
-
-static pthread_mutex_t	*init_forks_arr(int	nb_forks)
-{
-	pthread_mutex_t	*arr;
-	int				i;
-
-	arr = malloc(sizeof(pthread_mutex_t) * nb_forks);
-	if (!arr)
-	{
-		ft_putstr_fd(2, "Error: malloc failed !\n");
-		return (NULL);
-	}
-	i = 0;
-	while (i < nb_forks)
-	{
-		pthread_mutex_init(&arr[i], NULL);
-		i++;
-	}
-	return (arr);
-}
 
 static int	check_data(int ac, t_data *data)
 {
@@ -60,29 +41,38 @@ static int	check_data(int ac, t_data *data)
 	return (ret);
 }
 
-t_philo	*init_philo_arr(t_data *data)
+static void	parse_args(t_data *data, int ac, char **av)
 {
-	t_philo	*philo_arr;
-	int		i;
+	data->nb_philosophers = safe_atoi(av[1]);
+	data->time_to_die = safe_atoi(av[2]);
+	data->time_to_eat = safe_atoi(av[3]);
+	data->time_to_sleep = safe_atoi(av[4]);
+	data->one_is_dead = 0;
+	if (ac == 6)
+		data->max_meals = safe_atoi(av[5]);
+	else
+		data->max_meals = -1;
+}
 
-	if (!data)
-		return (NULL);
-	philo_arr = malloc(sizeof(t_philo) * data->nb_philosophers);
-	if (!philo_arr)
-	{
-		ft_putstr_fd(2, "Error: malloc failed !\n");
-		return (NULL);
-	}
-	i = 0;
-	while (i < data->nb_philosophers)
-	{
-		philo_arr[i].id = i + 1;
-		philo_arr[i].last_meal = 0;
-		philo_arr[i].nb_meals = 0;
-		philo_arr[i].data = data;
-		i++;
-	}
-	return (philo_arr);
+static int	init_locks(t_data *data)
+{
+	sem_unlink("/forks");
+	sem_unlink("/meal");
+	sem_unlink("/text");
+	sem_unlink("/end");
+	data->forks = sem_open("/forks", O_CREAT, 0644, data->nb_philosophers);
+	if (data->forks == SEM_FAILED)
+		return (-1);
+	data->meal_lock = sem_open("/meal", O_CREAT, 0644, 1);
+	if (data->meal_lock == SEM_FAILED)
+		return (-1);
+	data->text_lock = sem_open("/text", O_CREAT, 0644, 1);
+	if (data->text_lock == SEM_FAILED)
+		return (-1);
+	data->end_lock = sem_open("/end", O_CREAT, 0644, 0);
+	if (data->end_lock == SEM_FAILED)
+		return (-1);
+	return (0);
 }
 
 t_data	*parse(int ac, char **av)
@@ -95,20 +85,13 @@ t_data	*parse(int ac, char **av)
 		ft_putstr_fd(2, "Error: malloc failed !\n");
 		return (NULL);
 	}
-	data->nb_philosophers = safe_atoi(av[1]);
-	data->time_to_die = safe_atoi(av[2]);
-	data->time_to_eat = safe_atoi(av[3]);
-	data->time_to_sleep = safe_atoi(av[4]);
-	if (ac == 6)
-		data->max_meals = safe_atoi(av[5]);
-	else
-		data->max_meals = -1;
+	parse_args(data, ac, av);
 	if (!check_data(ac, data))
 		return (NULL);
-	data->forks = init_forks_arr(data->nb_philosophers);
-	if (!data->forks)
+	if (init_locks(data) == -1)
 	{
-		free(data);
+		clean_all(data);
+		ft_putstr_fd(2, "Error: impossible to init semaphore(s).");
 		return (NULL);
 	}
 	return (data);

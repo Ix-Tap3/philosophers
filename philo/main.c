@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 18:25:14 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/20 15:27:16 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/30 16:12:57 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,10 @@ int	main(int ac, char **av)
 	data = parse(ac, av);
 	philo_arr = init_philo_arr(data);
 	if (!data || !philo_arr)
-	{
-		clean_all(data, NULL);
 		return (1);
-	}
 	if (!create_threads(data, philo_arr))
 	{
- 		ft_putstr_fd(2, "Error while creating philosophers threads.\n");
+		ft_putstr_fd(2, "Error while creating philosophers threads.\n");
 		clean_all(data, philo_arr);
 		return (1);
 	}

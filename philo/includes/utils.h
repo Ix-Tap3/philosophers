@@ -6,7 +6,7 @@
 /*   By: pcaplat <pcaplat@42angouleme.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:34 by pcaplat           #+#    #+#             */
-/*   Updated: 2026/03/19 19:45:24 by pcaplat          ###   ########.fr       */
+/*   Updated: 2026/03/28 16:30:36 by pcaplat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 long long	get_actual_time(void);
 int			safe_atoi(char *str);
 void		ft_putstr_fd(int fd, char *str);
-void		display_time(t_philo *philo, long long actual_time, long long past_time);
+void		display_time(t_philo *philo, long long a_time, long long p_time);
 
 #endif
